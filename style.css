@@ -1,0 +1,214 @@
+/* Andrea Marini, personal website.
+   Layout: a white sheet inside a thin dark frame; a centred masthead (name, role, menu) over one
+   40rem reading column; each page opens with a centred uppercase title over a short rule.
+   One light theme, after the reference site.
+   Per cambiare colori, carattere o dimensioni, modifica solo le variabili qui sotto. */
+
+:root {
+  --frame: #0f1f1b;          /* cornice scura */
+  --sheet: #ffffff;          /* foglio bianco */
+  --ink: #1f2628;            /* nome, titoli */
+  --text: #545f64;           /* testo */
+  --muted: #6b777b;          /* righe in corsivo, didascalie */
+  --accent: #1b6b5f;         /* link e voce di menu attiva */
+  --accent-strong: #134d44;  /* link al passaggio del mouse */
+  --band: #f0f2f1;           /* fascia del piè di pagina */
+  --font: "Karla", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --size-name: clamp(2.25rem, 1.3rem + 4.4vw, 4.5rem);
+  --size-section: 1.5rem;
+  --size-label: 1.0625rem;
+  --size-title: 1.1875rem;
+  --size-body: 1.125rem;
+  --size-small: 0.9375rem;
+  --column: 40rem;
+  --frame-size: clamp(6px, 1.6vw, 20px);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: var(--frame-size);
+  background: var(--frame);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--size-body);
+  line-height: 1.65;
+}
+img { display: block; max-width: 100%; height: auto; }
+[hidden] { display: none !important; }
+p { margin: 0; }
+h1, h2, h3, h4 { margin: 0; }
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+a:hover { color: var(--accent-strong); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.skip { position: absolute; left: -9999px; top: 0; }
+.skip:focus {
+  left: calc(var(--frame-size) + 12px);
+  top: calc(var(--frame-size) + 12px);
+  z-index: 5;
+  padding: 0.4rem 0.8rem;
+  background: var(--sheet);
+}
+
+/* The sheet fills at least the window, so short pages keep the footer at the bottom */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 2 * var(--frame-size) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  background: var(--sheet);
+}
+@supports (height: 100svh) {
+  .sheet { min-height: calc(100svh - 2 * var(--frame-size) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+}
+main { flex: 1 0 auto; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--column) + 32px);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Masthead */
+.masthead { text-align: center; padding-block: clamp(2.75rem, 8vw, 5.5rem) clamp(2rem, 5vw, 3.25rem); }
+.name {
+  font-size: var(--size-name);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.name a { color: inherit; text-decoration: none; }
+.role { margin-top: 0.85rem; font-size: 1rem; font-style: italic; color: var(--muted); }
+.menu { margin-top: 1.75rem; }
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.75rem;
+}
+.menu a {
+  display: inline-block;
+  padding-block: 0.2rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+}
+.menu a:hover,
+.menu a:focus-visible,
+.menu a[aria-current="page"] { color: var(--accent); }
+
+/* Home: portrait floated beside the bio, text runs on beneath it */
+.intro { display: flow-root; padding-top: clamp(0.5rem, 2vw, 1.5rem); }
+.portrait {
+  float: left;
+  width: 13rem;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  margin: 0.35rem 1.75rem 1rem 0;
+}
+.bio p + p { margin-top: 1rem; }
+.links { margin-top: 1.25rem; font-size: var(--size-small); }
+.links + .links { margin-top: 0.35rem; }
+.links .sep { padding-inline: 0.55rem; color: var(--muted); }
+
+/* Inner pages */
+.section { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
+.section-title {
+  margin-bottom: 2.25rem;
+  text-align: center;
+  font-size: var(--size-section);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.section-title::after {
+  content: "";
+  display: block;
+  width: min(18rem, 70%);
+  height: 2px;
+  margin: 0.9rem auto 0;
+  background: var(--ink);
+}
+.label {
+  margin: 2.5rem 0 1.1rem;
+  font-size: var(--size-label);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.section-title + .label { margin-top: 0; }
+
+.entry { scroll-margin-top: 1.5rem; }
+.entry + .entry { margin-top: 1.75rem; }
+.entry-title {
+  font-size: var(--size-title);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.translation { margin-top: 0.15rem; font-size: var(--size-small); color: var(--muted); }
+.byline { margin-top: 0.25rem; }
+.meta { margin-top: 0.15rem; font-size: var(--size-small); font-style: italic; color: var(--muted); }
+.summary { margin-top: 0.75rem; }
+.entry-links {
+  margin-top: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  font-size: var(--size-small);
+}
+
+/* References */
+.referees {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem 2.5rem;
+  line-height: 1.5;
+}
+.referees li { min-width: 0; }
+.referee-name { font-weight: 600; color: var(--ink); }
+.referees a { overflow-wrap: anywhere; }
+
+/* Contact */
+.contact { display: grid; gap: 0.5rem; text-align: center; }
+
+/* Footer band */
+.colophon { margin-top: clamp(3.5rem, 9vw, 6rem); background: var(--band); color: var(--muted); font-size: 0.875rem; }
+.colophon .wrap {
+  padding-block: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1.5rem;
+}
+
+@media (max-width: 38rem) {
+  .portrait { float: none; width: min(12rem, 52%); margin: 0 auto 1.5rem; }
+  .referees { grid-template-columns: minmax(0, 1fr); }
+}
